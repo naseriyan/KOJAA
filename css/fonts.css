@@ -1,0 +1,15 @@
+@font-face {
+    font-family: IRANSansPersianNumericMedium;
+    src: url('../fonts/iransans/IRANSansPersianNumericMedium.woff') format('woff'),
+         url('../fonts/iransans/IRANSansPersianNumericMedium.woff2') format('woff2');
+  }
+
+  body {
+    font-family: IRANSansPersianNumericMedium;
+  }
+
+  label {
+    text-align:right;
+    width:100%;
+    font-size: small;
+}
