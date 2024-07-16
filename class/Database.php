@@ -5,14 +5,15 @@ class Database  {
     private  $conn;
 
     function Database() {
-      $this-> conn =  $this -> dbConnect(); 
+      $this->conn =  $this->dbConnect(); 
     }
   
-    function dbConnect()    {
+    private function dbConnect()    {
       
         $serverName = ".\sql2022";
         $connectionOptions = array("Database"=>"Kojaa",
-            "Uid"=>"kojaa", "PWD"=>"kojaa");
+            "Uid"=>"kojaa", "PWD"=>"kojaa"
+            ,"CharacterSet" => "UTF-8");
         $conn = sqlsrv_connect($serverName, $connectionOptions);
         if($conn == false)
         {
@@ -21,19 +22,22 @@ class Database  {
         }
         else
         {
-           echo 'connection ok\n';
+            return $conn;
         }
-
-        return $conn;
     }
 
-    function GetTable($sqlQuery)  {
-        
-        return sqlsrv_query($this->conn, $sqlQuery);
+    function GetTable($sqlQuery,$params)  {
+        if($this->conn==null)
+            $this->conn=$this->dbConnect();
+        return sqlsrv_query($this->conn, $sqlQuery,$params,array( "Scrollable" => 'static' ));
     }
 
-    function ExecuteQuery($sqlQuery) {
-        return sqlsrv_query($this-> conn , $sqlQuery);
+    function ExecuteQuery($sqlQuery,$params) {
+        if($this->conn==null)
+            $this->conn=$this->dbConnect();
+        sqlsrv_query($this->conn, "SET NAMES 'utf8'");
+
+        return sqlsrv_query($this->conn , $sqlQuery,$params);
     }
 
 }
