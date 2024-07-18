@@ -4,11 +4,11 @@
             if(isset($_SESSION["CurrentUser_ID"]))
             {
                 echo '<li class="nav-item">';
-                echo '<a class="nav-link" id="nav-link btn bg-primary text-white" href="./Index.php">جستجو...</a>';
+                echo '<a class="nav-link" id="nav-link btn bg-primary text-white" href="#">'.$_SESSION["CurrentUser_Title"].' خوش آمدید!</a>';
                 echo '</li>';
 
                 echo '<li class="nav-item">';
-                echo '<a class="nav-link" id="nav-link btn bg-primary text-white" href="#">'.$_SESSION["CurrentUser_Title"].' خوش آمدید!</a>';
+                echo '<a class="nav-link" id="nav-link btn bg-primary text-white" href="./Index.php">جستجو...</a>';
                 echo '</li>';
 
                 echo '<li class="nav-item">';

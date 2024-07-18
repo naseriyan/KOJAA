@@ -39,6 +39,8 @@
                         <th>تاریخ ایجاد</th>
                         <th>تعداد کالای مرتبط</th>
                         <th>آدرس</th>
+                        <th>تلفن</th>
+
                         <th>عملیات</th>
                     </tr>
                 </thead>
@@ -51,6 +53,8 @@
                             echo '<td>'.$row["CreateDate_Fa"].'</td>';
                             echo '<td>'.$row["ItemCount"].'</td>';
                             echo '<td>'.$row["Address"].'</td>';
+                            echo '<td>'.$row["Tell"].'</td>';
+
                             echo '<td>
                                 <a class="btn btn-primary"  href="EditStore.php?id='.$row["ID"].'">ویرایش</a>
                                 <a class="btn btn-primary"  href="RelatedItems.php?StoreId='.$row["ID"].'">اقلام مرتبط</a>';

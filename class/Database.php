@@ -35,7 +35,6 @@ class Database  {
     function ExecuteQuery($sqlQuery,$params) {
         if($this->conn==null)
             $this->conn=$this->dbConnect();
-        sqlsrv_query($this->conn, "SET NAMES 'utf8'");
 
         return sqlsrv_query($this->conn , $sqlQuery,$params);
     }

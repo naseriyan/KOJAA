@@ -32,8 +32,8 @@
                     </div>
                     <br>
                     <div class="btns_centered">
-                        <button  id="btn_search" type="submit">جستجو</button>
-                        <button id="btn_lucky"  type="submit">انتخاب اولین</button>
+                        <button  id="btn_search" type="submit"> جستجو نزدیکترین</button>
+                        <button id="btn_lucky"  type="submit">جستجوی همه</button>
                     </div>
                 </div>
             </section>

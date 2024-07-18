@@ -30,6 +30,7 @@
         {
             $_SESSION['form_error_signup'] = "تکرار کلمه عبور معتبر نمی باشد";
         } 
+        // چک کردن طول موبایل وعدد باشد
         else 
         {
             $db = new Database();
@@ -38,11 +39,7 @@
             $paramsUser = array($userName);
             $users=$db->GetTable($qExits,$paramsUser);
 
-            if ($users === false) 
-            {
-                die(print_r(sqlsrv_errors(), true));
-                exit();
-            }
+         
 
             if(sqlsrv_num_rows($users) > 0)
             {
@@ -56,12 +53,7 @@
                 $paramsInfo = array($title,$mobile,$userName,md5($password.'SALT123'));
 
                 $result= $db->ExecuteQuery($query,$paramsInfo);
-                if ($result === false) 
-                {
-                    die(print_r(sqlsrv_errors(), true));
-                    exit();
-                }
-
+             
                 header('Location: signup-completed.php');
             }
         }
@@ -90,6 +82,7 @@
                                     </div>
                                 </div>
                             </div>
+                            <!-- ? -->
                             <form action="signup.php" method="POST">
                                 <div class="row gy-3 overflow-hidden">
                                     <div class="col-12">

@@ -2,9 +2,9 @@
 <html dir="rtl" lang="ar">
 <head>
   <title>کجا داره؟!</title>
-  <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
   <link href="./css/bootstrap.min.css" rel="stylesheet">
   <link href="./css/fonts.css" rel="stylesheet">
   <script src="./js/bootstrap.bundle.min.js"></script>

@@ -76,7 +76,7 @@
             $id=(int)$_GET['id'];
             if($id>0)
             {
-                $query="SELECT  [ID],[UserRef],[Title],[Lat],[Long],[GroupRef],[Address],[CreateDateTime]  
+                $query="SELECT  [ID],[UserRef],[Title],[Lat],[Long],[GroupRef],[Address],[Tell],[CreateDateTime]  
                 FROM [tbStores] WHERE UserRef=? AND ID=?";
                 $paramsInfo = array($_SESSION['CurrentUser_ID'], $id);
                 $currentStore= $db->GetTable($query,$paramsInfo);
@@ -91,6 +91,7 @@
                     $row=sqlsrv_fetch_array($currentStore);
                     $title = $row['Title'];
                     $address = $row['Address'];
+                    $tell = $row['Tell'];
                     $GroupRef = $row['GroupRef'];
                     $lat = $row['Lat'];
                     $long = $row['Long'];
@@ -111,6 +112,7 @@
             $id=(int)$_POST['id'];
             $title = $_POST['Title'];
             $address = $_POST['Address'];
+            $tell = $_POST['Tell'];
             $GroupRef = $_POST['GroupRef'];
             $lat = $_POST['lat'];
             $long = $_POST['long'];
@@ -123,15 +125,15 @@
             {
                     if($id>0)
                     {
-                        $query=" UPDATE [tbStores] SET Title=?,Lat=?,Long=?,GroupRef=?,Address=? 
+                        $query=" UPDATE [tbStores] SET Title=?,Lat=?,Long=?,GroupRef=?,Address=?,Tell=?
                         WHERE ID=? AND UserRef=?";
-                        $paramsInfo = array($title,$lat,$long,$GroupRef,$address,$id,$_SESSION['CurrentUser_ID']);
+                        $paramsInfo = array($title,$lat,$long,$GroupRef,$address,$tell,$id,$_SESSION['CurrentUser_ID']);
                     }
                     else
                     {
-                        $query = "INSERT INTO [tbStores]([UserRef],[Title],[Lat],[Long],[GroupRef],[Address]) 
-                        values(?,?,?,?,?,?)";
-                        $paramsInfo = array($_SESSION['CurrentUser_ID'], $title,$lat,$long,$GroupRef,$address);
+                        $query = "INSERT INTO [tbStores]([UserRef],[Title],[Lat],[Long],[GroupRef],[Address],[Tell]) 
+                        values(?,?,?,?,?,?,?)";
+                        $paramsInfo = array($_SESSION['CurrentUser_ID'], $title,$lat,$long,$GroupRef,$address,$tell);
                     }
                     $result= $db->ExecuteQuery($query,$paramsInfo);
 
@@ -183,6 +185,14 @@
                             >
                             <label for="Address" class="form-label">آدرس فروشگاه</label>
                         </div>
+                        <div class="col-12">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" name="Tell" id="Tell" 
+                            placeholder="تلفن فروشگاه" required
+                            value="<?php if(isset($tell)) echo $tell ?>"
+                            >
+                            <label for="tell" class="form-label">تلفن فروشگاه</label>
+                        </div>
                     </div>
                     <div class="col-12">
                         <div class="form-floating mb-3">
@@ -220,7 +230,8 @@
                   <div class="col-12">
                     <div class="d-grid">
                         <div class="form-floating mb-3">
-                            <button class="btn bsb-btn-2xl btn-primary" type="submit">ثبت تغییرات</button>
+                            <button cla+
+                            ss="btn bsb-btn-2xl btn-primary" type="submit">ثبت تغییرات</button>
                             <a class="btn bsb-btn-2xl btn-danger" href="Stores.php">انصراف</a>
                         </div>
                     </div>
