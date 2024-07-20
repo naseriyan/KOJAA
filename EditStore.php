@@ -12,11 +12,10 @@
     <script src="./js/jquery.min.js"></script>
   
     <link href="https://static.neshan.org/sdk/openlayers/4.6.5/ol.css" rel="stylesheet" type="text/css">
-    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
     <script src="https://static.neshan.org/sdk/openlayers/4.6.5/ol.js" type="text/javascript"></script>
 
   <script>
-        function initMap() 
+        function LoadMap() 
         {
             
             var lat=Number(document.getElementById('lat').value);
@@ -25,8 +24,8 @@
             
             var map = new ol.Map({
                 target: 'map',
-                key: 'web.6DT5jBeGJGoaeM0Talpbhor8ej17Ipplu8NIihBI',
-                maptype: 'dreamy',
+                key: 'web.05d3ab77678d4e0cac24f6c45ff15bf7',
+                maptype: 'neshan',
                 poi: true,
                 traffic: false,
                 view: new ol.View({
@@ -42,14 +41,16 @@
             stopEvent: false
         });
 
-        marker.getElement().style.background = 'url(https://openlayers.org/en/latest/examples/data/icon.png) no-repeat';
+        marker.getElement().style.background = 'url(./images/StoreIcon.png) no-repeat';
         marker.getElement().style.width = '32px';
         marker.getElement().style.height = '48px';
         marker.getElement().style.cursor = 'pointer';
         map.addOverlay(marker);
 
         map.on('click', function(event) {
+            // مختصات
             var coordinates = ol.proj.toLonLat(event.coordinate);
+            // console.log(event.coordinate); 
             marker.setPosition(event.coordinate);
             document.getElementById('lat').value = coordinates[1];
             document.getElementById('long').value = coordinates[0];
@@ -58,8 +59,10 @@
         }        
 
         $(document).ready(function() {
-            initMap();
+            LoadMap();
         });
+
+        
     </script>
 
 </head>
@@ -230,8 +233,7 @@
                   <div class="col-12">
                     <div class="d-grid">
                         <div class="form-floating mb-3">
-                            <button cla+
-                            ss="btn bsb-btn-2xl btn-primary" type="submit">ثبت تغییرات</button>
+                            <button class="btn bsb-btn-2xl btn-primary" type="submit">ثبت تغییرات</button>
                             <a class="btn bsb-btn-2xl btn-danger" href="Stores.php">انصراف</a>
                         </div>
                     </div>

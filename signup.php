@@ -26,7 +26,11 @@
         $password = $_POST['password'];
         $password2 = $_POST['password2'];
 
-        if ($password != $password2) 
+        if(is_numeric($mobile)==false || strlen($mobile)!=11)
+        {
+            $_SESSION['form_error_signup'] = "موبایل باید از نوع عددی و با طول 11 رقم باشد";
+        }
+        else if ($password != $password2) 
         {
             $_SESSION['form_error_signup'] = "تکرار کلمه عبور معتبر نمی باشد";
         } 

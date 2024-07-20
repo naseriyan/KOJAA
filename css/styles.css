@@ -95,7 +95,7 @@ section {
 
 .search-btns {
     margin: 0 auto 17px;
-    width: 586px;
+    /*width: 100%;*/
 }
 
 .search_bar {

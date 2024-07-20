@@ -39,3 +39,16 @@ if ($users === false)
                 die(print_r(sqlsrv_errors(), true));
                 exit();
             }
+
+
+            /*
+            راهنمای نقشه نشان
+            https://platform.neshan.org/sdk/web-sdk-getting-started-v1/
+            */
+            <!-- https://platform.neshan.org/panel/login
+             ورود به نشان
+             
+             -->
+
+             w3schools.com
+             chatGPT.com
