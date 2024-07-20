@@ -53,7 +53,7 @@
             stopEvent: false
         });
 
-        marker.getElement().style.background = 'url(https://openlayers.org/en/latest/examples/data/icon.png) no-repeat';
+        marker.getElement().style.background = 'url(./images/StoreIcon.png) no-repeat';
         marker.getElement().style.width = '32px';
         marker.getElement().style.height = '48px';
         marker.getElement().style.cursor = 'pointer';
