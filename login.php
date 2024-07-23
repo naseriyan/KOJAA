@@ -40,6 +40,7 @@
                 $data=sqlsrv_fetch_array($user);
                 $_SESSION["CurrentUser_ID"]=$data["ID"];
                 $_SESSION["CurrentUser_Title"]=$data["Title"];
+                $_SESSION["CurrentUser_IsAdmin"]=$data["IsAdmin"];
                 header('Location: Index.php');
             }
             else

@@ -20,21 +20,44 @@
 
         $db=new Database();
         $params = array($_SESSION["CurrentUser_ID"]);
-        $stores=$db->GetTable("SELECT *,format([CreateDateTime],'yyyy/MM/dd','fa') as CreateDate_Fa
-        ,(SELECT count(*) FROM tbStoreItems where StoreRef=s.Id) as ItemCount
-         FROM tbStores s where UserRef=?",$params);
+
+        if($_SESSION["CurrentUser_IsAdmin"]==true)
+            {
+                $query="SELECT u.Title as UserTitle, s.*,format(s.[CreateDateTime],'yyyy/MM/dd','fa') as CreateDate_Fa
+                        ,(SELECT count(*) FROM tbStoreItems where StoreRef=s.Id) as ItemCount 
+                        FROM tbStores s   
+                        inner join tbUsers as u on u.ID= s.UserRef";
+
+            }
+
+            
+
+        else
+         {
+            $query="SELECT *,format([CreateDateTime],'yyyy/MM/dd','fa') as CreateDate_Fa
+            ,(SELECT count(*) FROM tbStoreItems where StoreRef=s.Id) as ItemCount
+            FROM tbStores s where UserRef=?  ";
+         }
+        $stores=$db->GetTable($query,$params);
+
     ?>
 
     <div class="content">
         <?php include('header.php'); ?>
         <div class="p-5 ">
-            <h2>فروشگاه های من</h2>
+            <h2> فروشگاها</h2>
                 <p>از طریق این بخش فروشگاه های مرتبط و همچنین کالاهای مرتبط با هر فروشگاه را مدیریت نمایید.</p>
                 <hr class="hr" />
                 <a class="btn btn-primary mb-3" href="EditStore.php?id=0">فروشگاه جدید</a>
                 <table class="table table-bordered">
                 <thead>
                     <tr>
+                <?php
+                     if($_SESSION["CurrentUser_IsAdmin"]==true)
+                     {
+                        echo' <th> کاربرمر بوطه </th>';
+                     }
+                ?>
                         <th>عنوان فروشگاه</th>
                         <th>تاریخ ایجاد</th>
                         <th>تعداد کالای مرتبط</th>
@@ -49,6 +72,10 @@
                         while ($row = sqlsrv_fetch_array($stores, SQLSRV_FETCH_ASSOC))
                         {
                             echo '<tr>';
+                            if($_SESSION["CurrentUser_IsAdmin"]==true)
+                            {
+                               echo' <th> '.$row["UserTitle"].'</th>';
+                            }
                             echo '<td>'.$row["Title"].'</td>';
                             echo '<td>'.$row["CreateDate_Fa"].'</td>';
                             echo '<td>'.$row["ItemCount"].'</td>';

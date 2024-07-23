@@ -21,9 +21,38 @@
         if ($_SERVER["REQUEST_METHOD"] == "GET") 
         {
             $StoreId=(int)$_GET['StoreId'];
-            $params = array($StoreId,$_SESSION["CurrentUser_ID"]);
+            if($_SESSION["CurrentUser_IsAdmin"]==true)
+            {
+                $params = array($StoreId);
+                $query="SELECT * FROM tbStores where ID=? ";
+                $queryItem= "SELECT i.[ID]
+                ,itm.Title
+                ,i.[Quantity]
+                ,i.[Fee]
+                    FROM [tbStoreItems] i
+                    inner join tbStores st on st.id=i.StoreRef
+                    inner join tbItems itm on itm.ID = i.ItemRef
+                    WHERE i.StoreRef=? ";
+                
+                
+            }
+            else
+            {
+                $params = array($StoreId,$_SESSION["CurrentUser_ID"]);
+                $query="SELECT * FROM tbStores where ID=? and UserRef=?";
+                $queryItem= "SELECT i.[ID]
+                ,itm.Title
+                ,i.[Quantity]
+                ,i.[Fee]
+                    FROM [tbStoreItems] i
+                    inner join tbStores st on st.id=i.StoreRef
+                    inner join tbItems itm on itm.ID = i.ItemRef
+                    WHERE i.StoreRef=?
+                    AND st.UserRef=? ";
+            }
+            
+            $store=$db->GetTable($query,$params);
 
-            $store=$db->GetTable("SELECT * FROM tbStores where ID=? and UserRef=?",$params);
             //اگر فروشگاهی با این شناسه پیدا نشد
             if(sqlsrv_num_rows($store)!=1)
             {
@@ -35,17 +64,9 @@
                 $rowStore=sqlsrv_fetch_array($store);
                 $storeTitle=$rowStore["Title"];
             }
-            $items=$db->GetTable("
-                SELECT i.[ID]
-                    ,itm.Title
-                    ,i.[Quantity]
-                    ,i.[Fee]
-                FROM [tbStoreItems] i
-                inner join tbStores st on st.id=i.StoreRef
-                inner join tbItems itm on itm.ID = i.ItemRef
-                WHERE i.StoreRef=? 
-                AND st.UserRef=?
-            ",$params);
+
+            $items=$db->GetTable(  $queryItem,$params);
+             
         }
     ?>
 

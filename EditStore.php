@@ -95,10 +95,22 @@
             $id=(int)$_GET['id'];
             if($id>0)
             {
-                $query="SELECT  [ID],[UserRef],[Title],[Lat],[Long],[GroupRef],[Address],[Tell],[CreateDateTime]  
-                FROM [tbStores] WHERE UserRef=? AND ID=?";
-                $paramsInfo = array($_SESSION['CurrentUser_ID'], $id);
-                $currentStore= $db->GetTable($query,$paramsInfo);
+            
+                if($_SESSION["CurrentUser_IsAdmin"]==true)
+                {
+                    $query="SELECT  [ID],[UserRef],[Title],[Lat],[Long],[GroupRef],[Address],[Tell],[CreateDateTime]  
+                    FROM [tbStores] WHERE ID=?";
+                    $paramsInfo = array( $id);
+                 }
+                
+                 else
+                  {
+                    $query="SELECT  [ID],[UserRef],[Title],[Lat],[Long],[GroupRef],[Address],[Tell],[CreateDateTime]  
+                    FROM [tbStores] WHERE UserRef=? AND ID=?";
+                    $paramsInfo = array($_SESSION['CurrentUser_ID'], $id);
+                  }
+                    $currentStore= $db->GetTable($query,$paramsInfo);
+                   
                 //اگر فروشگاهی با این شناسه پیدا نشد
                 if(sqlsrv_num_rows($currentStore)!=1)
                 {
