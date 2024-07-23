@@ -50,5 +50,3 @@ if ($users === false)
              
              -->
 
-             w3schools.com
-             chatGPT.com

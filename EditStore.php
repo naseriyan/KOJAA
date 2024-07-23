@@ -49,14 +49,30 @@
 
         map.on('click', function(event) {
             // مختصات
-            var coordinates = ol.proj.toLonLat(event.coordinate);
-            // console.log(event.coordinate); 
+            var LongLat = ol.proj.toLonLat(event.coordinate);
+            
             marker.setPosition(event.coordinate);
-            document.getElementById('lat').value = coordinates[1];
-            document.getElementById('long').value = coordinates[0];
+            document.getElementById('long').value = LongLat[0];
+            document.getElementById('lat').value = LongLat[1];
+            SetAddress(LongLat[1],LongLat[0]);
         });
 
         }        
+
+        function SetAddress(lat,long)
+        {
+            $.ajax({ 
+            type : "GET", 
+            url : "https://api.neshan.org/v5/reverse?lat="+lat+"&lng="+long, 
+            beforeSend: function(xhr){xhr.setRequestHeader('Api-Key', 'service.a0f1b1d74ea94a8ba88cb55ff5098c55');},
+            success : function(result) { 
+                document.getElementById('Address').value=result.formatted_address;
+            }, 
+            error : function(result) { 
+                alert("خطا در دریافت آدرس") 
+            } 
+            }); 
+        }
 
         $(document).ready(function() {
             LoadMap();
@@ -91,7 +107,7 @@
                 }
                 else
                 {
-                    $row=sqlsrv_fetch_array($currentStore);
+                    $row=sqlsrv_fetch_array($currentStore);     
                     $title = $row['Title'];
                     $address = $row['Address'];
                     $tell = $row['Tell'];
@@ -150,6 +166,22 @@
     
         }
 
+        function GetAddress($lat,$long)
+        {
+            $opts = array(
+            'http'=>array(
+                'method'=>"GET",
+                'header'=>"Api-Key:service.a0f1b1d74ea94a8ba88cb55ff5098c55"
+            )
+            );
+
+            $context = stream_context_create($opts);
+
+            $addressJson = file_get_contents('https://api.neshan.org/v5/reverse?lat='.$lat.'&lng='.$long, false, $context);
+
+            echo $addressJson;
+        }
+
     ?>
     <div class="content">
         <?php include('header.php'); ?>
@@ -172,7 +204,7 @@
                 <div class="row gy-3 overflow-hidden">
 
                     <div class="col-12">
-                        <div class="form-floating mb-3">
+                        <div class="form-floating mb-1">
                             <input type="text" class="form-control" name="Title" id="Title" 
                             placeholder="عنوان فروشگاه" required
                             value="<?php if(isset($title)) echo $title ?>">
@@ -180,16 +212,9 @@
                         </div>
                     </div>
 
+                   
                     <div class="col-12">
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" name="Address" id="Address" 
-                            placeholder="آدرس فروشگاه" required
-                            value="<?php if(isset($address)) echo $address ?>"
-                            >
-                            <label for="Address" class="form-label">آدرس فروشگاه</label>
-                        </div>
-                        <div class="col-12">
-                        <div class="form-floating mb-3">
+                        <div class="form-floating mb-1">
                             <input type="text" class="form-control" name="Tell" id="Tell" 
                             placeholder="تلفن فروشگاه" required
                             value="<?php if(isset($tell)) echo $tell ?>"
@@ -198,7 +223,7 @@
                         </div>
                     </div>
                     <div class="col-12">
-                        <div class="form-floating mb-3">
+                        <div class="form-floating mb-1">
                             <select class="form-control" name="GroupRef" id="GroupRef" placeholder="گروه فروشگاهی" required>
                                 <?php
                                     while ($row = sqlsrv_fetch_array($groups, SQLSRV_FETCH_ASSOC))
@@ -217,6 +242,16 @@
                     
                     <br>
                     <div class="col-12" id="map" style="width: 100%; height: 400px;"></div>
+                    <br>
+                    <div class="col-12">
+                        <div class="form-floating mb-1">
+                            <input type="text" class="form-control" name="Address" id="Address" 
+                            placeholder="آدرس فروشگاه" readonly
+                            value="<?php if(isset($address)) echo $address ?>"
+                            >
+                            <label for="Address" class="form-label">آدرس فروشگاه</label>
+                        </div>
+                    </div>
                     <br>
                     <div class="col-6 col-xs-12">
                         <div class="input-group form-floating m-3 col-6 col-xs-12">

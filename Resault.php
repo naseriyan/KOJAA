@@ -12,9 +12,11 @@
     <script src="./js/jquery.min.js"></script>
     <link href="https://static.neshan.org/sdk/openlayers/4.6.5/ol.css" rel="stylesheet" type="text/css">
     <script src="https://static.neshan.org/sdk/openlayers/4.6.5/ol.js" type="text/javascript"></script>
+    
 </head>
 
 <body>
+
 
 <script>
         function LoadMap() 
@@ -52,6 +54,7 @@
                 select st.Title as StoreTitle,itm.Title as ItemTitle,st.Lat,st.Long
                 ,st.Address,st.Tell 
                 ,sitm.Fee
+                ,sitm.Quantity
                 ,cast(@source.STDistance(geography::Point(st.Lat, st.Long, 4326)) as bigint)  as Distance
                 from tbStoreItems sitm
                 inner join tbStores st on st.ID = sitm.StoreRef
@@ -83,14 +86,17 @@
                     
                     marker.getElement().addEventListener('click', function(event) {
                         ShowInfo('".$row["StoreTitle"]."','".$row["Address"]."','".$row["Tell"]."','".$row["ItemTitle"]."'
-                        ,'".$row["Fee"]."','".$row["Distance"]."');
-                    });
+                        ,'".$row["Fee"]."','".$row["Quantity"]."','".$row["Distance"]."','".$row["Lat"]."','".$row["Long"]."');
+                    }
+                        
+                    );
                         ";
                 }
 
+
             ?>
 
-            var marker = new ol.Overlay(
+            var marker = new ol.Overlay( 
                 {
                     position: ol.proj.fromLonLat(point),
                     positioning: 'center-center',
@@ -105,16 +111,32 @@
             map.addOverlay(marker);
         }        
 
+            
+        function SetAddress(lat,long)
+        {
+            $.ajax({ 
+            type : "GET", 
+            url : "https://api.neshan.org/v5/reverse?lat="+lat+"&lng="+long, 
+            beforeSend: function(xhr){xhr.setRequestHeader('Api-Key', 'service.a0f1b1d74ea94a8ba88cb55ff5098c55');},
+            success : function(result) { 
+                document.getElementById('Address').value=result.formatted_address;
+            }, 
+            error : function(result) { 
+                alert("خطا در دریافت آدرس") 
+            } 
+            }); 
+        }
 
-
-            function ShowInfo(StoreTitle,Address,Tell,ItemTitle,Fee,Distance)
+            function ShowInfo(StoreTitle,Address,Tell,ItemTitle,Fee,Quantity,Distance,Lat,Long)
             {
                 document.getElementById('StoreTitle').value=StoreTitle;
                 document.getElementById('Address').value=Address;
                 document.getElementById('Tell').value=Tell;
                 document.getElementById('ItemTitle').value=ItemTitle;
                 document.getElementById('Fee').value=Fee;
+                document.getElementById('Quantity').value=Quantity;
                 document.getElementById('Distance').value=Distance;
+                // SetAddress(Lat,Long);
             }
 
 
@@ -141,7 +163,7 @@
     ?>
 
     <div class="content" >
-    <form action="Resault.php" method="GET">
+     <form action="Resault.php" method="GET">
         
         <div class="d-flex align-items-center row">
             <div class="col-8 d-flex align-items-center">
@@ -188,7 +210,11 @@
                     placeholder="قیمت" readonly>
                     <label for="Fee" class="form-label">قیمت</label>
                 </div>
-
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" name="Quantity" id="Quantity" 
+                    placeholder="موجودی" readonly>
+                    <label for="Fee" class="form-label">موجودی</label>
+                </div>
                 <div class="form-floating mb-3">
                     <input type="text" class="form-control" name="StoreTitle" id="StoreTitle" 
                     placeholder="عنوان فروشگاه" readonly>

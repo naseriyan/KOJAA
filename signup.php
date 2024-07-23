@@ -132,20 +132,20 @@
                                         </div>
                                     </div>
 
-                                    <?php
+                                        <?php
 
-                                    if (isset($_SESSION['form_error_signup'])) {
-                                        echo '<div class="col-12 bg-warning">
-                  <div class="d-grid">
-                    <p>';
-                                        echo $_SESSION['form_error_signup'];
-                                        echo '</p>
-                  </div>
-                </div>';
+                                        if (isset($_SESSION['form_error_signup'])) {
+                                            echo '<div class="col-12 bg-warning">
+                                                <div class="d-grid">
+                                                <p>';
+                                            echo $_SESSION['form_error_signup'];
+                                            echo '</p>
+                                                </div>
+                                            </div>';
 
-                                        unset($_SESSION['form_error_signup']);
-                                    }
-                                    ?>
+                                            unset($_SESSION['form_error_signup']);
+                                        }
+                                        ?>
 
                                 </div>
                             </form>
