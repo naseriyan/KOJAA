@@ -156,9 +156,18 @@
             {
                     if($id>0)
                     {
+                      if($_SESSION["CurrentUser_IsAdmin"]==true)
+                      {
+                        $query=" UPDATE [tbStores] SET Title=?,Lat=?,Long=?,GroupRef=?,Address=?,Tell=?
+                        WHERE ID=?";
+                        $paramsInfo = array($title,$lat,$long,$GroupRef,$address,$tell,$id);
+                      }
+                      else
+                      {
                         $query=" UPDATE [tbStores] SET Title=?,Lat=?,Long=?,GroupRef=?,Address=?,Tell=?
                         WHERE ID=? AND UserRef=?";
                         $paramsInfo = array($title,$lat,$long,$GroupRef,$address,$tell,$id,$_SESSION['CurrentUser_ID']);
+                      }
                     }
                     else
                     {
