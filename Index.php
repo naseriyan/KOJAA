@@ -82,6 +82,17 @@
         <form action="Resault.php" method="GET">
             <section>
                 <img src="images/kojaa.png" alt="کجا داره؟!!" class="google_logo">
+
+                <div class="col-12 text-center">
+                    <div class="form-check form-check-inline">
+                        <label class="form-check-label" for="inlineRadio1">جستجو در کالاها</label>
+                        <input class="form-check-input" type="radio" name="SearchType" id="inlineRadio1" value="1" checked>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <label class="form-check-label" for="inlineRadio2">جستجو در کالاها و عناوین فروشگاه ها</label>
+                        <input class="form-check-input" type="radio" name="SearchType" id="inlineRadio2" value="2">
+                    </div>
+                </div>
                 <div class="search-btns col-xl-6 col-lg-6 col-sm-10 col-xs-10">
                     <div class="search_bar">
                         <input type="text" id="q" name="q" required>

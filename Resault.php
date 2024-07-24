@@ -47,23 +47,33 @@
                 $lat=$_GET['lat'];
                 $long=$_GET['long'];
                 $distance=(int)$_GET['distance'];
+                $searchType=$_GET['SearchType'];
     
                 $db=new Database();
                 $query="
-                DECLARE @source geography =geography::Point(".$lat.", ".$long.", 4326)
-                select st.Title as StoreTitle,itm.Title as ItemTitle,st.Lat,st.Long
-                ,st.Address,st.Tell 
-                ,sitm.Fee
-                ,sitm.Quantity
-                ,cast(@source.STDistance(geography::Point(st.Lat, st.Long, 4326)) as bigint)  as Distance
-                from tbStoreItems sitm
-                inner join tbStores st on st.ID = sitm.StoreRef
-                inner join tbItems itm on itm.ID = sitm.ItemRef
-                where itm.Title like ?
-                AND cast(@source.STDistance(geography::Point(st.Lat, st.Long, 4326)) as bigint)<=?
-                AND sitm.Quantity>0
+                    DECLARE @source geography =geography::Point(".$lat.", ".$long.", 4326)
+                    select st.Title as StoreTitle,itm.Title as ItemTitle,st.Lat,st.Long
+                    ,st.Address,st.Tell 
+                    ,sitm.Fee
+                    ,sitm.Quantity
+                    ,cast(@source.STDistance(geography::Point(st.Lat, st.Long, 4326)) as bigint)  as Distance
+                    from tbStoreItems sitm
+                    inner join tbStores st on st.ID = sitm.StoreRef
+                    inner join tbItems itm on itm.ID = sitm.ItemRef
+                    where cast(@source.STDistance(geography::Point(st.Lat, st.Long, 4326)) as bigint)<=?
+                    AND sitm.Quantity>0
                 ";
-                $params = array('%'.$q.'%',$distance);
+                if($searchType==1)
+                {
+                    $query=$query." AND itm.Title like ?";
+                    $params = array($distance,'%'.$q.'%');
+                }
+                else
+                {
+                    $query=$query." AND (itm.Title like ? OR st.Title like ?)";
+                    $params = array($distance,'%'.$q.'%','%'.$q.'%');
+
+                }
     
                 $resault=$db->GetTable($query,$params);
                 
@@ -150,34 +160,23 @@
       
     </script>
 
-    <?php
-
-        if ($_SERVER["REQUEST_METHOD"] == "GET") 
-        {
-           
-
-            
-
-
-        }
-    ?>
 
     <div class="content" >
      <form action="Resault.php" method="GET">
         
-        <div class="d-flex align-items-center row">
-            <div class="col-8 d-flex align-items-center">
+        <div class="d-flex align-items-center">
+            <div class="col-11 d-flex align-items-center">
                 <a href="./Index.php">
                 <img src="images/kojaa.png" alt="کجا داره؟" class="img-fluid col-2" style="width: 150px; height: 50px;">
                 </a>
-                <div class="form-floating col-3">
+                <div class="form-floating col-2">
                                 <input type="number" class="form-control" name="distance" id="distance" 
                                 placeholder="حداکثر فاصله مدنظر(متر)" required 
                                 value="<?php if(isset($distance)) echo $distance ?>">
                                 <label for="distance" class="form-label">حداکثر فاصله مدنظر(متر)</label>
                 </div>
 
-                <div class="form-floating col-6" style="margin-right:5px;">
+                <div class="form-floating col-5" style="margin-right:5px;">
                                 <input type="text" class="form-control" name="q" id="q" 
                                 placeholder="کالا/خدمت" required
                                 value="<?php if(isset($q)) echo $q ?>">
@@ -186,6 +185,22 @@
 
                 <input type="hidden" id="lat" name="lat" value="<?php echo $lat; ?>"/>
                 <input type="hidden" id="long" name="long" value="<?php echo $long; ?>"/>
+
+                <div class="col-3 text-center" dir="rtl">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="SearchType" id="Radio1" 
+                        value="1"
+                        <?php if($searchType==1) echo 'checked'; ?>
+                        >
+                        <label class="form-check-label" for="Radio1">جستجو در کالاها</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="SearchType" id="Radio2" value="2"
+                        <?php if($searchType==2) echo 'checked';?>
+                        >
+                        <label class="form-check-label" for="Radio2">جستجو در کالاها و عناوین فروشگاه ها</label>
+                    </div>
+                </div>
 
                 <button class="btn btn-light  col-1" style="margin-right:5px;" type="submit">جستجو</button>
             </div>
